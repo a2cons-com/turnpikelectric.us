@@ -17,8 +17,12 @@ npm run build    # output in dist/
 - `_legacy/`: the old site and research notes (`CONTENT.md`)
 - `brand/`: logo source exports
 
-Raw photos go in `photos/raw/` (git-ignored). Strip metadata before using them:
-`exiftool -all= -overwrite_original photos/raw/*`
+## Adding photos
+1. Drop originals into `photos/raw/`. That folder is git-ignored, so originals never get published.
+2. Run `npm run photos`. It writes resized copies with all metadata (GPS, camera, dates) removed to `src/assets/photos/`, then moves each original to `photos/done/`.
+3. Rename the new files to something descriptive, then add alt text in `src/data/photos.ts`.
+
+Only the processed copies are committed. At build time Astro also generates the AVIF/WebP sizes.
 
 ## Before launch
 - [ ] Pick a design option, then make it `index.astro` and delete the others
