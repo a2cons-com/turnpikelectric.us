@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+dist/
+.astro/
+.env*
+# legacy compiled JS contains an SMTP token
+_legacy/_next/static/chunks/
+_legacy/_next/static/6akpSa1VaxG7Mg5GfeC4E/
