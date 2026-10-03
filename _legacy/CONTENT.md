@@ -48,6 +48,7 @@ look-alike accounts exist, but they belong to other companies: Turnpike Electric
 Turnpike Electric Inc (Pine Brook NJ and Boston), and @turnpike.global.
 
 Public records and directory listings:
+- **Sunbiz:** Turnpike Electric Corp., FL profit corp, filed 2010-06-09, active. President and registered agent: Sterling Velazquez.
 - **DBPR:** Sterling Velazquez dba Turnpike Electric Corp., Certified Electrical Contractor EC13004836. Valid through 2028-08-31 (per owner).
 - **BuildZoom:** 515 permits worth about $6.76M. Score 113, in the top 3% of FL contractors. Also holds City of Lakeland license AEC-11785. Insurance: Ascendant Commercial; workers comp through AmTrust. Address listed: **770 Ponce De Leon, Coral Gables, FL 33134**. Permits come from Miami, Fort Lauderdale, West Palm Beach, Punta Gorda and Lakeland, so the "Tallahassee to the Keys" claim holds up. Review (2013): "they get the job done right the first time. clean and fast. great customer service"
 - **Angi:** 5.0/5 from 8 reviews; the site blocked automated fetching. Snippets: "the most efficient and reliable team you can hire for all electrical work", "very professional and knowledgeable". Mentions plans, permitting, inspections and vendor coordination (turnkey).
@@ -55,6 +56,7 @@ Public records and directory listings:
 
 ## Domains
 - turnpikelectric.us: website on Vercel; mail on Microsoft 365 (outlook.com MX)
+- turnpikelectric.com: mail on Google Workspace; A records point at Google Sites (ghs), which returns 404, so a dead Google Sites mapping
 
 ## Brand
 - Logo green `#4a7c44`, gray `#777777` (tagline), black slab-serif wordmark
