@@ -1,15 +1,124 @@
 ---
 import Logo from './Logo.astro';
-import { company } from '../data/site';
+import Icon from './Icon.astro';
+import { company, nav, services } from '../data/site';
+const a = company.address;
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
   <div class="wrap">
-    <div>
-      <Logo />
-      <p>{company.legalName} · {company.licenseLabel} {company.license}</p>
-      <p>Licensed &amp; insured · Se habla español</p>
+    <div class="top">
+      <div class="brand">
+        <Logo />
+        <p>{company.motto} Licensed electrical contracting for commercial, hospitality and residential projects across Florida.</p>
+        <p class="badge"><Icon name="badge" size={18} /> {company.licenseLabel} · {company.license}</p>
+      </div>
+      <nav aria-label="Footer">
+        <h4>Company</h4>
+        <a href="/">Home</a>
+        {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+        <a href="/contact/">Contact</a>
+      </nav>
+      <nav aria-label="Services">
+        <h4>Services</h4>
+        {services.slice(0, 6).map((s) => <a href={`/services/#${s.slug}`}>{s.title}</a>)}
+      </nav>
+      <div>
+        <h4>Get in touch</h4>
+        <p><small>Office</small><a href={`tel:${company.officeTel}`}>{company.officePhone}</a></p>
+        <p><small>Field</small><a href={`tel:${company.fieldTel}`}>{company.fieldPhone}</a></p>
+        <p><small>Address</small><a href={company.mapsUrl} rel="noopener" target="_blank">{a.street}<br />{a.city}, {a.region} {a.zip}</a></p>
+      </div>
     </div>
-    <p>© {year} {company.legalName}</p>
+    <div class="bottom">
+      <p>© {year} {company.legalName} Licensed &amp; insured. Se habla español.</p>
+      <p>{company.tagline}</p>
+    </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    background: var(--navy);
+    color: rgb(255 255 255 / 0.7);
+    padding: 72px 0 28px;
+    font-size: 0.95rem;
+    --logo-ink: #fff;
+    --logo-tag: rgb(255 255 255 / 0.6);
+    --logo-green: #8cc63f;
+  }
+  .top {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.2fr 1.2fr;
+    gap: 40px;
+  }
+  .brand :global(.logo) {
+    width: 210px;
+    margin-bottom: 20px;
+  }
+  .brand p {
+    max-width: 30em;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: 500 0.8rem/1.3 var(--font-mono);
+    color: #fff;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+  h4 {
+    font: 500 0.75rem/1 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin: 6px 0 18px;
+  }
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--signal);
+  }
+  small {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgb(255 255 255 / 0.5);
+  }
+  .bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    justify-content: space-between;
+    font-size: 0.85rem;
+  }
+  .bottom p {
+    margin: 0;
+  }
+  @media (max-width: 900px) {
+    .top {
+      grid-template-columns: 1fr 1fr;
+    }
+    .brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 480px) {
+    .top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

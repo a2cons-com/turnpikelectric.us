@@ -1,8 +1,9 @@
 ---
 import svg from '../assets/logo.svg?raw';
 interface Props {
+  href?: string;
   class?: string;
 }
-const { class: className } = Astro.props;
+const { href = '/', class: className } = Astro.props;
 ---
-<a href="#top" class:list={['logo', className]} aria-label="Turnpike Electric home" set:html={svg} />
+<a href={href} class:list={['logo', className]} aria-label="Turnpike Electric home" set:html={svg} />

@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import Process from '../components/Process.astro';
+import CtaBand from '../components/CtaBand.astro';
+---
+<Base title="Electrical Services" description="Commercial, hospitality, industrial and residential electrical contracting in Florida: service upgrades, generators and UPS, fire alarm, data, EV charging and lighting.">
+  <PageHeader
+    label="Services"
+    title="Commercial, hospitality and residential electrical"
+    intro="New construction and remodeling across Florida. We have done it all since 2010, and we deliver it turnkey."
+  />
+  <section class="section">
+    <div class="wrap">
+      <ServiceGrid detailed />
+    </div>
+  </section>
+  <section class="section band">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">How we work</p>
+        <h2>Turnkey, from plans to final inspection</h2>
+        <p>One point of contact. We take care of permitting, inspections and coordination with vendors.</p>
+      </div>
+      <Process />
+    </div>
+  </section>
+  <div class="section tight"></div>
+  <CtaBand />
+</Base>

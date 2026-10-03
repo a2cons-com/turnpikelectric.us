@@ -2,15 +2,247 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { company, nav } from '../data/site';
+
+interface Props {
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
+const path = Astro.url.pathname;
 ---
-<header class="site-header">
+<header class:list={['site-header', { overlay }]} data-header>
   <div class="wrap">
-    <Logo />
-    <nav aria-label="Main">
-      {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    <Logo href="/" />
+    <nav class="nav" aria-label="Main" id="site-nav">
+      {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+      <a class="nav-cta-mobile" href="/contact/">Contact</a>
+      <a class="nav-phone-mobile" href={`tel:${company.officeTel}`}><Icon name="phone" size={18} /> {company.officePhone}</a>
     </nav>
-    <a class="btn btn-primary header-call" href={`tel:${company.officeTel}`}>
-      <Icon name="phone" size={18} /><span>{company.officePhone}</span>
-    </a>
+    <div class="actions">
+      <a class="phone" href={`tel:${company.officeTel}`}><Icon name="phone" size={18} /><span>{company.officePhone}</span></a>
+      <a class="btn btn-primary cta" href="/contact/">Get an estimate</a>
+      <button class="menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu" data-menu>
+        <span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const button = header.querySelector<HTMLButtonElement>('[data-menu]')!;
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  button.addEventListener('click', () => {
+    const open = header.classList.toggle('open');
+    button.setAttribute('aria-expanded', String(open));
+    button.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: rgb(242 245 248 / 0.85);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid var(--line);
+    transition:
+      background 0.25s,
+      border-color 0.25s;
+  }
+  .site-header.overlay {
+    position: fixed;
+    inset: 0 0 auto 0;
+    background: transparent;
+    border-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    --logo-ink: #fff;
+    --logo-tag: rgb(255 255 255 / 0.75);
+    --logo-green: #8cc63f;
+    color: #fff;
+  }
+  .site-header.overlay.scrolled,
+  .site-header.overlay.open {
+    background: rgb(15 29 42 / 0.88);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-color: rgb(255 255 255 / 0.08);
+  }
+  .wrap {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .site-header :global(.logo) {
+    height: 60px;
+    flex: none;
+  }
+  .site-header :global(.logo svg) {
+    height: 100%;
+    width: auto;
+  }
+  .nav {
+    display: flex;
+    gap: 2px;
+    margin-left: 12px;
+  }
+  .nav a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.97rem;
+    opacity: 0.85;
+  }
+  .nav a:hover,
+  .nav a[aria-current='page'] {
+    opacity: 1;
+    background: rgb(15 29 42 / 0.06);
+  }
+  .overlay .nav a:hover,
+  .overlay .nav a[aria-current='page'] {
+    background: rgb(255 255 255 / 0.12);
+  }
+  .nav-cta-mobile,
+  .nav-phone-mobile {
+    display: none;
+  }
+  .actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.97rem;
+  }
+  .cta {
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 0.95rem;
+  }
+  .menu {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 12px;
+    background: rgb(15 29 42 / 0.06);
+    color: inherit;
+    cursor: pointer;
+    position: relative;
+  }
+  .overlay .menu {
+    background: rgb(255 255 255 / 0.14);
+  }
+  .menu span {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.2s;
+  }
+  .menu span:first-child {
+    top: 17px;
+  }
+  .menu span:last-child {
+    top: 25px;
+  }
+  .open .menu span:first-child {
+    transform: translateY(4px) rotate(45deg);
+  }
+  .open .menu span:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
+  @media (max-width: 1060px) {
+    .phone span {
+      display: none;
+    }
+  }
+  @media (max-width: 900px) {
+    .menu {
+      display: block;
+    }
+    .phone {
+      display: none;
+    }
+    .nav {
+      position: fixed;
+      inset: var(--header-h) 0 0 0;
+      margin: 0;
+      flex-direction: column;
+      gap: 4px;
+      padding: 24px var(--gutter);
+      background: var(--navy);
+      color: #fff;
+      transform: translateY(-8px);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 0.2s,
+        transform 0.2s,
+        visibility 0.2s;
+    }
+    .open .nav {
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+    }
+    .nav a {
+      font: 600 1.6rem/1.2 var(--font-head);
+      padding: 14px 0;
+      border-radius: 0;
+      border-bottom: 1px solid rgb(255 255 255 / 0.1);
+      opacity: 1;
+    }
+    .nav a:hover,
+    .nav a[aria-current='page'] {
+      background: none;
+      color: var(--signal);
+    }
+    .nav-cta-mobile,
+    .nav-phone-mobile {
+      display: flex;
+    }
+    .nav-phone-mobile {
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem !important;
+      border: 0 !important;
+      margin-top: 16px;
+      color: var(--signal);
+    }
+    .open {
+      background: var(--navy) !important;
+      color: #fff;
+      --logo-ink: #fff;
+      --logo-tag: rgb(255 255 255 / 0.75);
+      --logo-green: #8cc63f;
+    }
+  }
+  @media (max-width: 520px) {
+    .cta {
+      display: none;
+    }
+    .site-header :global(.logo) {
+      height: 48px;
+    }
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+import { process } from '../data/site';
+---
+<ol class="steps">
+  {
+    process.map((p, i) => (
+      <li>
+        <span class="num">{String(i + 1).padStart(2, '0')}</span>
+        <h3>{p.title}</h3>
+        <p>{p.text}</p>
+      </li>
+    ))
+  }
+</ol>
+<style>
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  li {
+    position: relative;
+    padding: 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 44px;
+    right: -17px;
+    width: 18px;
+    border-top: 2px dashed var(--green);
+    opacity: 0.6;
+  }
+  .num {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid var(--green);
+    color: var(--green-2);
+    font: 600 0.85rem/1 var(--font-mono);
+    margin-bottom: 22px;
+  }
+  p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.97rem;
+  }
+  @media (max-width: 900px) {
+    .steps {
+      grid-template-columns: 1fr 1fr;
+    }
+    li::after {
+      display: none;
+    }
+  }
+  @media (max-width: 520px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

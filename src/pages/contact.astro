@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import Icon from '../components/Icon.astro';
+import { company } from '../data/site';
+const a = company.address;
+---
+<Base title="Contact & Free Estimates" description={`Request a free electrical estimate from Turnpike Electric. Call ${company.officePhone} or send us your plans.`}>
+  <PageHeader label="Contact" title="Tell us about your project" intro="Free estimates. Send your plans or a short description and we will reply within 2 business days. For anything urgent, just call." />
+  <section class="section">
+    <div class="wrap contact">
+      <ul class="cards">
+        <li><span class="icon-tile"><Icon name="phone" /></span><div><small>Office</small><a href={`tel:${company.officeTel}`}>{company.officePhone}</a></div></li>
+        <li><span class="icon-tile"><Icon name="phone" /></span><div><small>Field</small><a href={`tel:${company.fieldTel}`}>{company.fieldPhone}</a></div></li>
+        <li><span class="icon-tile"><Icon name="pin" /></span><div><small>Office address</small><a href={company.mapsUrl} rel="noopener" target="_blank">{a.street}<br />{a.city}, {a.region} {a.zip}</a></div></li>
+        <li><span class="icon-tile"><Icon name="badge" /></span><div><small>{company.licenseLabel}</small><strong>{company.license}</strong></div></li>
+      </ul>
+      <QuoteForm />
+    </div>
+  </section>
+</Base>
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(32px, 6vw, 72px);
+    align-items: start;
+  }
+  .cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .cards li {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  small {
+    display: block;
+    font: 500 0.72rem/1.4 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cards a,
+  .cards strong {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1.05rem;
+  }
+  .cards a:hover {
+    color: var(--green-2);
+  }
+  @media (max-width: 860px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

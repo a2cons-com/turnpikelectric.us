@@ -1,21 +1,24 @@
 ---
-import '@fontsource/roboto-slab/700.css';
-import '@fontsource/roboto-slab/800.css';
+import '@fontsource-variable/inter-tight';
 import '@fontsource-variable/inter';
-import '@fontsource-variable/archivo/wdth.css';
-import '@fontsource/zilla-slab/600.css';
-import '@fontsource/zilla-slab/700.css';
-import '@fontsource-variable/ibm-plex-sans';
 import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import { company, intro, indexable } from '../data/site';
 
 interface Props {
-  variant?: 'a' | 'b' | 'c';
   title?: string;
+  description?: string;
+  overlayHeader?: boolean;
   noindex?: boolean;
 }
-const { variant = 'a', title = `${company.name} | Licensed Electrical Contractor, Florida`, noindex = false } = Astro.props;
-const description = intro;
+const {
+  title,
+  description = intro,
+  overlayHeader = false,
+  noindex = false,
+} = Astro.props;
+const fullTitle = title ? `${title} | ${company.name}` : `${company.name} | Licensed Electrical Contractor in Florida`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og-image.jpg', Astro.site);
 const robots = noindex || !indexable ? 'noindex, nofollow' : 'index, follow';
@@ -23,25 +26,18 @@ const robots = noindex || !indexable ? 'noindex, nofollow' : 'index, follow';
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Electrician',
-  name: company.legalName,
   '@id': new URL('/#business', Astro.site).toString(),
+  name: company.legalName,
   url: Astro.site?.toString(),
   logo: new URL('/icon-512.png', Astro.site).toString(),
   image: ogImage.toString(),
-  description,
-  knowsLanguage: ['en', 'es'],
-  priceRange: '$$',
-  sameAs: [company.angiUrl],
-  hasCredential: {
-    '@type': 'EducationalOccupationalCredential',
-    credentialCategory: 'license',
-    name: `${company.licenseLabel} ${company.license}`,
-    recognizedBy: { '@type': 'GovernmentOrganization', name: 'Florida Department of Business and Professional Regulation' },
-  },
+  description: intro,
   telephone: company.officePhone,
   foundingDate: String(company.founded),
   slogan: company.tagline,
-  areaServed: 'Florida',
+  areaServed: { '@type': 'State', name: 'Florida' },
+  knowsLanguage: ['en', 'es'],
+  sameAs: [company.angiUrl],
   address: {
     '@type': 'PostalAddress',
     streetAddress: company.address.street,
@@ -50,14 +46,20 @@ const jsonLd = {
     postalCode: company.address.zip,
     addressCountry: 'US',
   },
+  hasCredential: {
+    '@type': 'EducationalOccupationalCredential',
+    credentialCategory: 'license',
+    name: `${company.licenseLabel} ${company.license}`,
+    recognizedBy: { '@type': 'GovernmentOrganization', name: 'Florida Department of Business and Professional Regulation' },
+  },
 };
 ---
 <!doctype html>
-<html lang="en" data-variant={variant}>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="robots" content={robots} />
@@ -66,7 +68,7 @@ const jsonLd = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#4a7c44" />
+    <meta name="theme-color" content="#0f1d2a" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="geo.region" content="US-FL" />
     <meta name="geo.placename" content="Hialeah" />
@@ -74,19 +76,39 @@ const jsonLd = {
     <meta property="og:site_name" content={company.name} />
     <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Turnpike Electric logo and two electricians wiring a service panel" />
+    <meta property="og:image:alt" content="Turnpike Electric logo and crew at work" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
+    <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
-  <body id="top">
-    <slot />
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header overlay={overlayHeader} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
+<style is:global>
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 8px;
+    z-index: 100;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+  }
+  .skip:focus {
+    left: 8px;
+  }
+</style>

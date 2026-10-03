@@ -1,0 +1,105 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { projects } from '../data/site';
+import { photo } from '../data/photos';
+
+interface Props {
+  limit?: number;
+}
+const { limit } = Astro.props;
+const list = limit ? projects.slice(0, limit) : projects;
+---
+<div class="projects">
+  {
+    list.map((p) => (
+      <article class:list={['project', { 'has-photo': p.photo }]}>
+        {p.photo && (
+          <Picture src={photo(p.photo).src} alt={photo(p.photo).alt} widths={[500, 800]} sizes="(max-width: 760px) 100vw, 33vw" formats={['avif', 'webp']} loading="lazy" />
+        )}
+        <div class="body">
+          <div class="meta">
+            <span class="tag">{p.type}</span>
+            <span class="place"><Icon name="pin" size={15} /> {p.place}</span>
+          </div>
+          <h3>{p.name}</h3>
+          <p>{p.scope}</p>
+        </div>
+      </article>
+    ))
+  }
+</div>
+<style>
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .project {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .project :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .project:not(.has-photo) {
+    background:
+      linear-gradient(rgb(74 124 68 / 0.07) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, rgb(74 124 68 / 0.07) 1px, transparent 1px) 0 0 / 24px 24px,
+      var(--surface);
+  }
+  .body {
+    padding: 24px 26px 26px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .tag {
+    font: 500 0.72rem/1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: var(--green-soft);
+    color: var(--green-2);
+  }
+  .place {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  h3 {
+    font-size: 1.35rem;
+  }
+  p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.97rem;
+  }
+  @media (max-width: 960px) {
+    .projects {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .projects {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

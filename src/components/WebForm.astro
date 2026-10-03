@@ -13,7 +13,7 @@ const { id, subject, submitLabel, successText } = Astro.props;
 <form class="form" id={id} action="https://api.web3forms.com/submit" method="POST" data-success={successText}>
   <input type="hidden" name="access_key" value={web3formsKey} />
   <input type="hidden" name="subject" value={subject} />
-  <input type="hidden" name="from_name" value="turnpikelectric.us website" />
+  <input type="hidden" name="from_name" value="Turnpike Electric website" />
   <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
   <slot />
   <button class="btn btn-primary" type="submit">{submitLabel}</button>

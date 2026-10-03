@@ -1,0 +1,78 @@
+---
+// "On the job" block with the job-site clip in a phone frame (from option C).
+import Icon from './Icon.astro';
+---
+<div class="feature">
+  <div class="text">
+    <p class="label">On the job</p>
+    <h2>Clean work you can see before the walls close</h2>
+    <p class="lead">Neat conduit runs, labeled panels and a tidy site at the end of every day. It is how we pass inspections the first time.</p>
+    <ul>
+      <li><Icon name="badge" size={20} /> Licensed and insured, statewide</li>
+      <li><Icon name="chat" size={20} /> One point of contact from plans to final</li>
+      <li><Icon name="bolt" size={20} /> Crews in Miami-Dade, Broward and Palm Beach</li>
+    </ul>
+  </div>
+  <figure class="phone">
+    <video src="/media/mast-install.mp4" poster="/media/mast-install-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="Electrician installing a service mast on a job site"></video>
+    <figcaption>Service mast install · Miami</figcaption>
+  </figure>
+</div>
+<style>
+  .feature {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 28px 0 0;
+    display: grid;
+    gap: 14px;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    color: var(--green-2);
+  }
+  li :global(svg) {
+    flex: none;
+  }
+  .phone {
+    position: relative;
+    justify-self: center;
+    width: min(320px, 80vw);
+    margin: 0;
+    padding: 10px;
+    background: var(--navy);
+    border-radius: 36px;
+    box-shadow: 0 30px 60px -20px rgb(15 29 42 / 0.45);
+    transform: rotate(2deg);
+  }
+  video {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    border-radius: 27px;
+    background: var(--navy-2);
+  }
+  figcaption {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    font: 500 0.72rem/1 var(--font-mono);
+    color: #fff;
+    background: rgb(0 0 0 / 0.5);
+    padding: 7px 9px;
+    border-radius: 6px;
+  }
+  @media (max-width: 820px) {
+    .feature {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

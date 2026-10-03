@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ProjectCards from '../components/ProjectCards.astro';
+import Gallery from '../components/Gallery.astro';
+import CtaBand from '../components/CtaBand.astro';
+---
+<Base title="Projects" description="Selected Turnpike Electric projects: Miami Beach hotel renovations, condo services, public facilities and residential work across Florida.">
+  <PageHeader
+    label="Projects"
+    title="Selected projects"
+    intro="More than 500 permitted jobs since 2010: hotel renovations in Miami Beach, condo services, public facilities and homes from Palm Beach to Punta Gorda."
+  />
+  <section class="section">
+    <div class="wrap">
+      <ProjectCards />
+    </div>
+  </section>
+  <section class="section band">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">On the job</p>
+        <h2>Our crews at work</h2>
+      </div>
+      <Gallery />
+    </div>
+  </section>
+  <div class="section tight"></div>
+  <CtaBand />
+</Base>

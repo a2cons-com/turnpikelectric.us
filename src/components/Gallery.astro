@@ -1,0 +1,35 @@
+---
+import { Picture } from 'astro:assets';
+import { photo, galleryOrder } from '../data/photos';
+const items = galleryOrder.map(photo);
+---
+<div class="gallery">
+  {
+    items.map((p) => (
+      <figure>
+        <Picture src={p.src} alt={p.alt} widths={[400, 700, 1000]} sizes="(max-width: 600px) 100vw, 33vw" formats={['avif', 'webp']} loading="lazy" />
+      </figure>
+    ))
+  }
+</div>
+<style>
+  .gallery {
+    columns: 3 280px;
+    column-gap: 16px;
+  }
+  figure {
+    margin: 0 0 16px;
+    break-inside: avoid;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  figure :global(img) {
+    width: 100%;
+    height: auto;
+    transition: transform 0.5s ease;
+  }
+  figure:hover :global(img) {
+    transform: scale(1.03);
+  }
+</style>

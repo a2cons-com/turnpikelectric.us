@@ -40,21 +40,17 @@ export const photo = (name: string): Photo => {
   return p;
 };
 
+// Home hero background. Swap for a better (or generated) wide image when available.
+export const heroPhoto = { name: 'commercial-meter-center', position: '62% 45%' };
+
 // Order for the project gallery: strongest first.
 export const galleryOrder = [
   'commercial-meter-center',
-  'crew-panel-logo-shirts',
   'commercial-switchgear',
-  'monticello-hotel',
-  'mast-panel-ladder',
-  'interior-lighting-ladder',
-  'service-disconnect',
   'crew-trio-yard',
-  'underground-trench',
-  'meter-hardhat',
+  'interior-lighting-ladder',
+  'mast-conduit-install',
   'crew-kitchen-smile',
-  'panel-finished-conduit',
   'crew-garden-arch',
   'hallway-ladder',
-  'panel-install-ladder',
 ];

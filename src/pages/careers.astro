@@ -1,0 +1,74 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ApplyForm from '../components/ApplyForm.astro';
+import { photo } from '../data/photos';
+const img = photo('crew-kitchen-smile');
+const perks = [
+  'Steady, year-round work on commercial, hospitality and residential projects',
+  'Helpers, apprentices, journeymen and foremen welcome',
+  'Learn from licensed electricians on real projects',
+  'A crew that values quality over anything and everything',
+  'Se habla español',
+];
+---
+<Base title="Careers: Now Hiring Electricians" description="Turnpike Electric is hiring electricians in South Florida: helpers, apprentices, journeymen and foremen. Apply online in two minutes.">
+  <PageHeader label="Now hiring" title="Build your career with Turnpike Electric" intro="We are busy year-round and looking for electricians who take pride in clean, code-compliant work." />
+  <section class="section">
+    <div class="wrap careers">
+      <div>
+        <h2>Why work with us</h2>
+        <ul class="perks">{perks.map((p) => <li>{p}</li>)}</ul>
+        <Picture class="photo" src={img.src} alt={img.alt} widths={[500, 800]} sizes="(max-width: 860px) 100vw, 40vw" formats={['avif', 'webp']} />
+      </div>
+      <ApplyForm />
+    </div>
+  </section>
+</Base>
+<style>
+  .careers {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: start;
+  }
+  h2 {
+    font-size: 1.8rem;
+  }
+  .perks {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+    display: grid;
+    gap: 14px;
+  }
+  .perks li {
+    display: flex;
+    gap: 12px;
+  }
+  .perks li::before {
+    content: '';
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin-top: 3px;
+    border-radius: 50%;
+    background: var(--green)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E")
+      center/13px no-repeat;
+  }
+  .careers :global(.photo) {
+    height: auto;
+    width: 100%;
+    border-radius: var(--radius);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: 50% 30%;
+  }
+  @media (max-width: 860px) {
+    .careers {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

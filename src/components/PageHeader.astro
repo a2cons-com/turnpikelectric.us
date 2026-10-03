@@ -1,0 +1,31 @@
+---
+// Inner-page header: label, title, intro on the blueprint paper, optional photo strip.
+interface Props {
+  label: string;
+  title: string;
+  intro?: string;
+}
+const { label, title, intro } = Astro.props;
+---
+<section class="page-header">
+  <div class="wrap">
+    <p class="label">{label}</p>
+    <h1>{title}</h1>
+    {intro && <p class="lead">{intro}</p>}
+    <slot />
+  </div>
+</section>
+<style>
+  .page-header {
+    padding: clamp(56px, 8vw, 104px) 0 clamp(40px, 6vw, 72px);
+    border-bottom: 1px solid var(--line);
+  }
+  h1 {
+    font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+    max-width: 14em;
+  }
+  .lead {
+    max-width: 40em;
+    margin: 0;
+  }
+</style>

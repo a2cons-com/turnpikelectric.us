@@ -12,8 +12,9 @@ npm run build    # output in dist/
 ## Where things are
 - `src/data/site.ts`: all copy, contact info, services, reviews and projects
 - `src/data/photos.ts`: photo alt text and gallery order (images in `src/assets/photos`)
-- `src/components/`: page sections; `HeroA/B/C` are the three design options
-- `src/pages/a|b|c.astro`: option previews; `index.astro` is a temporary chooser
+- `src/pages/`: Home, Services, Projects, About, Careers, Contact, 404
+- `src/components/`: header, footer, hero and page sections
+- `src/data/photos.ts` → `heroPhoto`: which photo is the home hero background
 - `_legacy/`: the old site and research notes (`CONTENT.md`)
 - `brand/`: logo source exports
 
@@ -25,8 +26,7 @@ npm run build    # output in dist/
 Astro generates the resized AVIF/WebP/JPEG versions that are published at build time.
 
 ## Before launch
-- [ ] Pick a design option, then make it `index.astro` and delete the others
-- [ ] Put the Web3Forms access key in `src/data/site.ts` (`web3formsKey`)
+- [ ] Replace the hero photo with the generated/retouched one
 - [ ] Confirm the project list with Sterling
 - [ ] Set `indexable = true` in `src/data/site.ts`, switch `site` and `CNAME` to the real domain
 - [ ] Revoke the old site's smtpjs token
