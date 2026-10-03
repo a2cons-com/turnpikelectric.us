@@ -66,7 +66,7 @@ export const services: Service[] = [
     title: 'Commercial & Retail',
     text: 'Tenant build-outs, offices, restaurants and retail, from new construction to occupied remodels.',
     items: ['Tenant improvements', 'Restaurant kitchens & hoods', 'Switchboards & distribution', 'Lighting & controls'],
-    photo: 'commercial-switchgear',
+    photo: 'hero-hardhats-switchgear',
   },
   {
     slug: 'hospitality',
@@ -74,7 +74,7 @@ export const services: Service[] = [
     title: 'Hospitality & Multifamily',
     text: 'Hotels, condos and apartment buildings. We work around guests and residents and keep the building running.',
     items: ['Hotel renovations', 'Meter centers & services', 'Pool & amenity electrical', 'Common-area lighting'],
-    photo: 'commercial-meter-center',
+    photo: 'electrical-room',
   },
   {
     slug: 'industrial',

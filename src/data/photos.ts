@@ -22,6 +22,10 @@ const alts: Record<string, string> = {
   'hallway-ladder': 'Electrician installing a ceiling device in a hallway',
   'commercial-meter-center': 'Crew rebuilding a multi-meter center on a commercial building',
   'commercial-switchgear': 'Electricians in hard hats working on commercial switchgear',
+  'hero-crew-meter-center': 'Turnpike Electric crew rebuilding a commercial meter center',
+  'hero-hardhats-switchgear': 'Two Turnpike Electric electricians in hard hats at commercial panels',
+  'hero-team-yard': 'Turnpike Electric team inspecting a job on site',
+  'electrical-room': 'Commercial electrical room with meter centers and switchgear',
   'monticello-hotel': 'The Monticello Hotel in Miami Beach, a Turnpike Electric renovation project',
 };
 
@@ -41,13 +45,13 @@ export const photo = (name: string): Photo => {
 };
 
 // Home hero background. Swap for a better (or generated) wide image when available.
-export const heroPhoto = { name: 'commercial-meter-center', position: '62% 45%' };
+export const heroPhoto = { name: 'hero-crew-meter-center', position: '70% 50%', mobilePosition: '80% 50%' };
 
 // Order for the project gallery: strongest first.
 export const galleryOrder = [
-  'commercial-meter-center',
-  'commercial-switchgear',
-  'crew-trio-yard',
+  'hero-crew-meter-center',
+  'hero-hardhats-switchgear',
+  'hero-team-yard',
   'interior-lighting-ladder',
   'mast-conduit-install',
   'crew-kitchen-smile',

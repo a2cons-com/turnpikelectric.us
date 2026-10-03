@@ -6,7 +6,7 @@ import { company, intro, stats } from '../data/site';
 import { photo, heroPhoto } from '../data/photos';
 
 const img = photo(heroPhoto.name);
-const widths = [768, 1280, 1920, 2560];
+const widths = [768, 1280, 1920, 2560].filter((w) => w <= img.src.width).concat(img.src.width < 2560 ? [img.src.width] : []);
 const avif = await getImage({ src: img.src, widths, format: 'avif' });
 const webp = await getImage({ src: img.src, widths, format: 'webp' });
 const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
@@ -15,7 +15,7 @@ const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
   <picture class="bg">
     <source type="image/avif" srcset={avif.srcSet.attribute} sizes="100vw" />
     <source type="image/webp" srcset={webp.srcSet.attribute} sizes="100vw" />
-    <img src={jpg.src} srcset={jpg.srcSet.attribute} sizes="100vw" alt="" fetchpriority="high" style={`object-position:${heroPhoto.position}`} />
+    <img src={jpg.src} srcset={jpg.srcSet.attribute} sizes="100vw" alt="" fetchpriority="high" style={`--pos:${heroPhoto.position};--pos-m:${heroPhoto.mobilePosition}`} />
   </picture>
   <div class="wrap">
     <div class="copy">
@@ -46,7 +46,7 @@ const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
   .hero {
     position: relative;
     isolation: isolate;
-    min-height: min(100svh, 900px);
+    min-height: min(88svh, 800px);
     display: flex;
     align-items: center;
     padding: calc(var(--header-h) + 48px) 0 140px;
@@ -63,6 +63,12 @@ const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
   }
   .bg img {
     object-fit: cover;
+    object-position: var(--pos);
+  }
+  @media (max-width: 760px) {
+    .bg img {
+      object-position: var(--pos-m);
+    }
   }
   .hero::before {
     content: '';
@@ -87,7 +93,10 @@ const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
     -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 60%);
   }
   .copy {
-    max-width: 720px;
+    max-width: 600px;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 5.4vw, 4.3rem);
   }
   .kicker {
     display: inline-flex;

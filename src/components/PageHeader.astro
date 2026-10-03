@@ -1,13 +1,27 @@
 ---
-// Inner-page header: label, title, intro on the blueprint paper, optional photo strip.
+// Inner-page header. With `image`, it becomes a full-bleed photo banner.
+import { getImage } from 'astro:assets';
+import { photo } from '../data/photos';
+
 interface Props {
   label: string;
   title: string;
   intro?: string;
+  image?: string;
+  position?: string;
+  narrow?: boolean;
 }
-const { label, title, intro } = Astro.props;
+const { label, title, intro, image, position = '50% 50%', narrow = false } = Astro.props;
+let bg: { srcset: string; src: string } | undefined;
+if (image) {
+  const src = photo(image).src;
+  const widths = [768, 1280, 1920].filter((w) => w <= src.width);
+  const img = await getImage({ src, widths, format: 'webp' });
+  bg = { srcset: img.srcSet.attribute, src: img.src };
+}
 ---
-<section class="page-header">
+<section class:list={['page-header', { banner: bg, narrow }]}>
+  {bg && <img class="bg" src={bg.src} srcset={bg.srcset} sizes="100vw" alt="" fetchpriority="high" style={`object-position:${position}`} />}
   <div class="wrap">
     <p class="label">{label}</p>
     <h1>{title}</h1>
@@ -17,6 +31,8 @@ const { label, title, intro } = Astro.props;
 </section>
 <style>
   .page-header {
+    position: relative;
+    isolation: isolate;
     padding: clamp(56px, 8vw, 104px) 0 clamp(40px, 6vw, 72px);
     border-bottom: 1px solid var(--line);
   }
@@ -27,5 +43,40 @@ const { label, title, intro } = Astro.props;
   .lead {
     max-width: 40em;
     margin: 0;
+  }
+  .banner {
+    color: #fff;
+    border: 0;
+    padding: clamp(96px, 14vw, 180px) 0 clamp(56px, 7vw, 88px);
+    overflow: hidden;
+  }
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+  .banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgb(10 20 30 / 0.88) 0%, rgb(10 20 30 / 0.6) 50%, rgb(10 20 30 / 0.15) 100%);
+  }
+  .narrow h1 {
+    max-width: 8.5em;
+  }
+  .banner .label {
+    color: var(--signal);
+  }
+  .banner .lead {
+    color: rgb(255 255 255 / 0.85);
+  }
+  @media (max-width: 760px) {
+    .banner::before {
+      background: linear-gradient(0deg, rgb(10 20 30 / 0.92) 0%, rgb(10 20 30 / 0.65) 60%, rgb(10 20 30 / 0.4) 100%);
+    }
   }
 </style>
