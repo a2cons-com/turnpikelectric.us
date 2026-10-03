@@ -22,7 +22,12 @@ The job form also asks for date of birth, so drop that field.
 - Inquiry form: first/last name, email, "How can we help?", reply "within 2 business days"
 - Job application: name, email, DOB, years of experience, previous employer, has trade tools, description; reply "within 5 business days"
 
-### Contact
+### Contact (current, from invoice #534, 2026-09-14; supersedes the old site)
+- Office: **2482 W 80th St, Suite 4, Hialeah, FL 33016**
+- Office phone: **(786) 841-2727**, field phone: **(786) 712-1024**
+- Invoice terms show turnkey scope: rough and final inspections, contingency, permits coordinated
+
+### Contact (old site)
 - Phone: (786) 712-1024
 - Fax: (305) 675-3711
 - FL license: EC13004836 (Certified Electrical Contractor)
@@ -47,6 +52,9 @@ Public records and directory listings:
 - **BuildZoom:** 515 permits worth about $6.76M. Score 113, in the top 3% of FL contractors. Also holds City of Lakeland license AEC-11785. Insurance: Ascendant Commercial; workers comp through AmTrust. Address listed: **770 Ponce De Leon, Coral Gables, FL 33134**. Permits come from Miami, Fort Lauderdale, West Palm Beach, Punta Gorda and Lakeland, so the "Tallahassee to the Keys" claim holds up. Review (2013): "they get the job done right the first time. clean and fast. great customer service"
 - **Angi:** 5.0/5 from 8 reviews; the site blocked automated fetching. Snippets: "the most efficient and reliable team you can hire for all electrical work", "very professional and knowledgeable". Mentions plans, permitting, inspections and vendor coordination (turnkey).
 - **Indeed:** a company page exists (salaries only); the site blocked automated fetching.
+
+## Domains
+- turnpikelectric.us: website on Vercel; mail on Microsoft 365 (outlook.com MX)
 
 ## Brand
 - Logo green `#4a7c44`, gray `#777777` (tagline), black slab-serif wordmark
