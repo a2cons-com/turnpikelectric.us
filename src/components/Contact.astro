@@ -13,7 +13,6 @@ const a = company.address;
       <ul class="contact-list">
         <li><span class="icon"><Icon name="phone" /></span><div><small>Office</small><a href={`tel:${company.officeTel}`}>{company.officePhone}</a></div></li>
         <li><span class="icon"><Icon name="phone" /></span><div><small>Field</small><a href={`tel:${company.fieldTel}`}>{company.fieldPhone}</a></div></li>
-        <li><span class="icon"><Icon name="mail" /></span><div><small>Email</small><a href={`mailto:${company.email}`}>{company.email}</a></div></li>
         <li><span class="icon"><Icon name="pin" /></span><div><small>Office</small><a href={company.mapsUrl} rel="noopener" target="_blank">{a.street}<br />{a.city}, {a.region} {a.zip}</a></div></li>
         <li><span class="icon"><Icon name="badge" /></span><div><small>{company.licenseLabel}</small><strong>{company.license}</strong></div></li>
       </ul>
