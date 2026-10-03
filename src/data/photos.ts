@@ -20,6 +20,9 @@ const alts: Record<string, string> = {
   'crew-panel-logo-shirts': 'Two Turnpike Electric electricians wiring a service panel',
   'interior-lighting-ladder': 'Electricians installing pendant lighting in a finished room',
   'hallway-ladder': 'Electrician installing a ceiling device in a hallway',
+  'commercial-meter-center': 'Crew rebuilding a multi-meter center on a commercial building',
+  'commercial-switchgear': 'Electricians in hard hats working on commercial switchgear',
+  'monticello-hotel': 'The Monticello Hotel in Miami Beach, a Turnpike Electric renovation project',
 };
 
 export type Photo = { src: ImageMetadata; alt: string; name: string };
@@ -39,7 +42,10 @@ export const photo = (name: string): Photo => {
 
 // Order for the project gallery: strongest first.
 export const galleryOrder = [
+  'commercial-meter-center',
   'crew-panel-logo-shirts',
+  'commercial-switchgear',
+  'monticello-hotel',
   'mast-panel-ladder',
   'interior-lighting-ladder',
   'service-disconnect',
