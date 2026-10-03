@@ -1,0 +1,32 @@
+---
+import { company, reviews } from '../data/site';
+---
+<section class="section alt" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" data-num="04 /">Reviews</span>
+      <h2>What clients say</h2>
+      <div class="rating-summary">
+        <span class="big">5.0</span>
+        <span><span class="stars" aria-hidden="true">★★★★★</span><br />Every review on <a href={company.angiUrl} rel="noopener" target="_blank">Angi</a> is 5 stars</span>
+      </div>
+    </div>
+    <div class="reviews">
+      {
+        reviews.map((r) => (
+          <figure class="review">
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <blockquote>“{r.text}”</blockquote>
+            <figcaption><strong>{r.name}</strong> · via {r.source}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>
+<style>
+  .review .stars {
+    color: #e8a800;
+    letter-spacing: 2px;
+  }
+</style>

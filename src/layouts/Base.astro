@@ -1,0 +1,93 @@
+---
+import '@fontsource/roboto-slab/700.css';
+import '@fontsource/roboto-slab/800.css';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource/zilla-slab/600.css';
+import '@fontsource/zilla-slab/700.css';
+import '@fontsource-variable/ibm-plex-sans';
+import '../styles/global.css';
+import { company, intro, indexable } from '../data/site';
+
+interface Props {
+  variant?: 'a' | 'b' | 'c';
+  title?: string;
+  noindex?: boolean;
+}
+const { variant = 'a', title = `${company.name} | Licensed Electrical Contractor, Florida`, noindex = false } = Astro.props;
+const description = intro;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og-image.jpg', Astro.site);
+const robots = noindex || !indexable ? 'noindex, nofollow' : 'index, follow';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Electrician',
+  name: company.legalName,
+  '@id': new URL('/#business', Astro.site).toString(),
+  url: Astro.site?.toString(),
+  logo: new URL('/icon-512.png', Astro.site).toString(),
+  image: ogImage.toString(),
+  description,
+  knowsLanguage: ['en', 'es'],
+  priceRange: '$$',
+  sameAs: [company.angiUrl],
+  hasCredential: {
+    '@type': 'EducationalOccupationalCredential',
+    credentialCategory: 'license',
+    name: `${company.licenseLabel} ${company.license}`,
+    recognizedBy: { '@type': 'GovernmentOrganization', name: 'Florida Department of Business and Professional Regulation' },
+  },
+  telephone: company.officePhone,
+  email: company.email,
+  foundingDate: String(company.founded),
+  slogan: company.tagline,
+  areaServed: 'Florida',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: company.address.street,
+    addressLocality: company.address.city,
+    addressRegion: company.address.region,
+    postalCode: company.address.zip,
+    addressCountry: 'US',
+  },
+};
+---
+<!doctype html>
+<html lang="en" data-variant={variant}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={robots} />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#4a7c44" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="geo.region" content="US-FL" />
+    <meta name="geo.placename" content="Hialeah" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Turnpike Electric logo and two electricians wiring a service panel" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body id="top">
+    <slot />
+  </body>
+</html>

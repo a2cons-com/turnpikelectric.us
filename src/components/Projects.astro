@@ -1,0 +1,38 @@
+---
+import { Picture } from 'astro:assets';
+import { photo, galleryOrder } from '../data/photos';
+import { projects } from '../data/site';
+const items = galleryOrder.map(photo);
+---
+<section class="section" id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" data-num="03 /">Our work</span>
+      <h2>Selected projects</h2>
+      <p>Hotels, condos, public facilities and homes across Florida. A few of the jobs we have wired:</p>
+    </div>
+    <ul class="project-list">
+      {
+        projects.map((p) => (
+          <li>
+            <span class="tag">{p.type}</span>
+            <h3>{p.name}</h3>
+            <p class="place">{p.place}</p>
+            <p>{p.scope}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <h3 class="gallery-title">On the job</h3>
+    <div class="gallery">
+      {
+        items.map((p) => (
+          <figure>
+            <Picture src={p.src} alt={p.alt} widths={[400, 700]} sizes="(max-width: 600px) 100vw, 33vw" formats={['avif', 'webp']} loading="lazy" />
+            <figcaption>{p.alt}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

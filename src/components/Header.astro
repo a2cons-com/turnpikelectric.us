@@ -1,0 +1,16 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { company, nav } from '../data/site';
+---
+<header class="site-header">
+  <div class="wrap">
+    <Logo />
+    <nav aria-label="Main">
+      {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    </nav>
+    <a class="btn btn-primary header-call" href={`tel:${company.officeTel}`}>
+      <Icon name="phone" size={18} /><span>{company.officePhone}</span>
+    </a>
+  </div>
+</header>

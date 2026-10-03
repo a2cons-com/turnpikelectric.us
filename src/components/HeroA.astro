@@ -1,0 +1,114 @@
+---
+// Option A "Clean": split hero, text left, 3-photo collage right.
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { company, intro } from '../data/site';
+import { photo } from '../data/photos';
+const [p1, p2, p3] = ['crew-panel-logo-shirts', 'mast-panel-ladder', 'interior-lighting-ladder'].map(photo);
+---
+<section class="hero-a">
+  <div class="wrap">
+    <div class="copy">
+      <span class="eyebrow">Licensed · Insured · Since {company.founded}</span>
+      <h1>Quality over anything and everything.</h1>
+      <p class="lead">{intro}</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#contact">Request a free estimate <Icon name="arrow" size={18} /></a>
+        <a class="btn btn-ghost" href={`tel:${company.officeTel}`}><Icon name="phone" size={18} /> {company.officePhone}</a>
+      </div>
+      <p class="note"><span class="stars">★★★★★</span> 5.0 on Angi · Se habla español</p>
+    </div>
+    <div class="collage">
+      <Picture class="c1" src={p1.src} alt={p1.alt} widths={[400, 700, 900]} sizes="(max-width: 900px) 60vw, 30vw" formats={['avif', 'webp']} loading="eager" fetchpriority="high" />
+      <Picture class="c2" src={p2.src} alt={p2.alt} widths={[300, 500]} sizes="(max-width: 900px) 40vw, 18vw" formats={['avif', 'webp']} loading="eager" />
+      <Picture class="c3" src={p3.src} alt={p3.alt} widths={[300, 500]} sizes="(max-width: 900px) 40vw, 18vw" formats={['avif', 'webp']} loading="eager" />
+      <div class="license-card">
+        <Icon name="badge" />
+        <div><small>FL Certified Electrical Contractor</small><strong>{company.license}</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .hero-a {
+    padding: clamp(40px, 7vw, 96px) 0 clamp(48px, 7vw, 96px);
+    background: radial-gradient(1200px 500px at 85% 0%, var(--green-tint), transparent 70%);
+  }
+  .hero-a .wrap {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  .lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    max-width: 34em;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 28px 0 18px;
+  }
+  .note {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .stars {
+    color: #e8a800;
+    letter-spacing: 2px;
+  }
+  .collage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+    aspect-ratio: 1 / 1.05;
+  }
+  .collage :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .collage :global(picture) {
+    min-height: 0;
+  }
+  .collage :global(.c1) {
+    grid-row: 1 / 3;
+  }
+  .license-card {
+    position: absolute;
+    left: -24px;
+    bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    color: var(--green);
+  }
+  .license-card small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+  .license-card strong {
+    color: var(--ink);
+    font-size: 1.05rem;
+  }
+  @media (max-width: 900px) {
+    .hero-a .wrap {
+      grid-template-columns: 1fr;
+    }
+    .license-card {
+      left: 12px;
+      bottom: 12px;
+    }
+  }
+</style>

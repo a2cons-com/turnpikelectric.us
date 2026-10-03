@@ -1,0 +1,51 @@
+---
+// Web3Forms-backed form. Works without JS (plain POST + redirect);
+// with JS it submits in place and shows a status line.
+import { web3formsKey } from '../data/site';
+interface Props {
+  id: string;
+  subject: string;
+  submitLabel: string;
+  successText: string;
+}
+const { id, subject, submitLabel, successText } = Astro.props;
+---
+<form class="form" id={id} action="https://api.web3forms.com/submit" method="POST" data-success={successText}>
+  <input type="hidden" name="access_key" value={web3formsKey} />
+  <input type="hidden" name="subject" value={subject} />
+  <input type="hidden" name="from_name" value="turnpikelectric.us website" />
+  <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+  <slot />
+  <button class="btn btn-primary" type="submit">{submitLabel}</button>
+  <p class="status" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form.form').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = form.querySelector<HTMLElement>('.status')!;
+      const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      button.disabled = true;
+      status.dataset.state = '';
+      status.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Send failed');
+        form.reset();
+        status.dataset.state = 'ok';
+        status.textContent = form.dataset.success ?? 'Sent. Thank you!';
+      } catch {
+        status.dataset.state = 'error';
+        status.textContent = 'Sorry, that did not go through. Please call us instead.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

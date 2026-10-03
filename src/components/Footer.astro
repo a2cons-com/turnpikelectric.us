@@ -1,0 +1,15 @@
+---
+import Logo from './Logo.astro';
+import { company } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <Logo />
+      <p>{company.legalName} · {company.licenseLabel} {company.license}</p>
+      <p>Licensed &amp; insured · Se habla español</p>
+    </div>
+    <p>© {year} {company.legalName}</p>
+  </div>
+</footer>
