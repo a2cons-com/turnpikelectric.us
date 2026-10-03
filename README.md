@@ -19,10 +19,10 @@ npm run build    # output in dist/
 
 ## Adding photos
 1. Drop originals into `photos/raw/`. That folder is git-ignored, so originals never get published.
-2. Run `npm run photos`. It writes resized copies with all metadata (GPS, camera, dates) removed to `src/assets/photos/`, then moves each original to `photos/done/`.
+2. Run `npm run photos` (needs `exiftool`). It copies the originals at full size into `src/assets/photos/` with all metadata (GPS, camera, dates) removed, then moves each original to `photos/done/`.
 3. Rename the new files to something descriptive, then add alt text in `src/data/photos.ts`.
 
-Only the processed copies are committed. At build time Astro also generates the AVIF/WebP sizes.
+Astro generates the resized AVIF/WebP/JPEG versions that are published at build time.
 
 ## Before launch
 - [ ] Pick a design option, then make it `index.astro` and delete the others
