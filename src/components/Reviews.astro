@@ -1,5 +1,6 @@
 ---
-import { reviews } from '../data/site';
+import { company, reviews } from '../data/site';
+const sourceUrl: Record<string, string> = { Angi: company.angiUrl, BuildZoom: company.buildzoomUrl };
 interface Props {
   limit?: number;
 }
@@ -14,12 +15,13 @@ const list = limit ? reviews.slice(0, limit) : reviews;
         <blockquote>“{r.text}”</blockquote>
         <figcaption>
           <span class="avatar" aria-hidden="true">{r.name.charAt(0)}</span>
-          <span><strong>{r.name}</strong><br /><small>Verified review · {r.source}</small></span>
+          <span><strong>{r.name}</strong><br /><small>{r.date} · <a href={sourceUrl[r.source]} rel="noopener" target="_blank">via {r.source}</a></small></span>
         </figcaption>
       </figure>
     ))
   }
 </div>
+<p class="more"><a class="link-arrow" href={company.angiUrl} rel="noopener" target="_blank">Read all 8 reviews on Angi →</a></p>
 <style>
   .reviews {
     display: grid;
@@ -63,6 +65,12 @@ const list = limit ? reviews.slice(0, limit) : reviews;
   }
   small {
     color: var(--muted);
+  }
+  small a {
+    color: var(--green-2);
+  }
+  .more {
+    margin: 28px 0 0;
   }
   @media (max-width: 960px) {
     .reviews {

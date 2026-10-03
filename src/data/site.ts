@@ -22,6 +22,7 @@ export const company = {
   },
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=2482+W+80th+St+Suite+4+Hialeah+FL+33016',
   angiUrl: 'https://www.angi.com/companylist/us/fl/miami/turnpike-electric-corp-reviews-11205864.htm',
+  buildzoomUrl: 'https://www.buildzoom.com/contractor/turnpike-electric-corp',
 };
 
 // Web3Forms access key. It is public by design (it only allows sending to the
@@ -131,31 +132,37 @@ export const reviews = [
   {
     name: 'Guillermo R.',
     source: 'Angi',
+    date: 'Aug 2024',
     text: 'Always professional, communicates perfectly, handles permits and inspections excellently, pricing is fair. Can’t recommend anyone better!',
   },
   {
     name: 'Rita S.',
     source: 'Angi',
+    date: 'Aug 2024',
     text: 'The most efficient and reliable team you can hire for all electrical work in your house or business. Thank you Sterling!',
   },
   {
     name: 'Orlando L.',
     source: 'Angi',
+    date: 'Aug 2024',
     text: 'From the planning phase to the completion of the project. Very professional and knowledgeable. Excellent work performed. High level of detail, clean work.',
   },
   {
     name: 'Jose M.',
     source: 'Angi',
+    date: 'Aug 2024',
     text: 'Outstanding work every time. I had another electrician before and I will never call anyone else other than Turnpike. On time, clean work and on schedule.',
   },
   {
     name: 'Jorge F.',
     source: 'Angi',
+    date: 'Aug 2024',
     text: 'Installation correct as per plans, professional performance, including quality work on time and for the client satisfaction.',
   },
   {
     name: 'BuildZoom client',
     source: 'BuildZoom',
+    date: '2013',
     text: 'They get the job done right the first time. Clean and fast. Great customer service.',
   },
 ];
