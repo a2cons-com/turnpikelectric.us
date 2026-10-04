@@ -14,10 +14,31 @@ import Icon from './Icon.astro';
     </ul>
   </div>
   <figure class="phone">
-    <video src="/media/electrical-room-pan.mp4" poster="/media/electrical-room-pan-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="Walk-through of a finished commercial electrical room"></video>
+    <video data-src="/media/electrical-room-pan.mp4" poster="/media/electrical-room-pan-poster.jpg" muted loop playsinline preload="none" aria-label="Walk-through of a finished commercial electrical room"></video>
     <figcaption>Finished electrical room · Commercial</figcaption>
   </figure>
 </div>
+<script>
+  // Fetch and play the clip only once it scrolls into view, so it never
+  // competes with the first screen.
+  document.querySelectorAll<HTMLVideoElement>('video[data-src]').forEach((v) => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            if (!v.src) v.src = v.dataset.src!;
+            v.play().catch(() => {});
+          } else if (v.src) {
+            v.pause();
+          }
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    io.observe(v);
+  });
+</script>
+
 <style>
   .feature {
     display: grid;
