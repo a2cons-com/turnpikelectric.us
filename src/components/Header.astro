@@ -237,6 +237,12 @@ const path = Astro.url.pathname;
       margin-top: 16px;
       color: var(--signal);
     }
+    /* backdrop-filter makes the header the containing block for the
+       fixed menu panel, so it must be off while the menu is open */
+    .site-header.open {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
     .open {
       background: var(--navy) !important;
       color: #fff;
