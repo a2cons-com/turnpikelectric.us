@@ -88,6 +88,15 @@ const jsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      // Draw the logo's sine wave once per visit (skipped for reduced motion).
+      try {
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('te-wave')) {
+          document.documentElement.classList.add('wave-draw');
+          sessionStorage.setItem('te-wave', '1');
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>

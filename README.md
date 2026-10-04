@@ -27,5 +27,6 @@ Astro generates the resized AVIF/WebP/JPEG versions that are published at build 
 
 ## Before launch
 - [ ] Replace the hero photo with the generated/retouched one
+- [ ] Web3Forms key: make one with the inbox Sterling reads (current key delivers to the address it was created with)
 - [ ] Set `indexable = true` in `src/data/site.ts`, switch `site` and `CNAME` to the real domain
 - [ ] Revoke the old site's smtpjs token
