@@ -8,6 +8,7 @@ import Reviews from '../components/Reviews.astro';
 import VideoFeature from '../components/VideoFeature.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
+import Industries from '../components/Industries.astro';
 ---
 <Base overlayHeader>
   <Hero />
@@ -23,8 +24,17 @@ import Icon from '../components/Icon.astro';
         <a class="link-arrow" href="/services/">All services <Icon name="arrow" size={16} /></a>
       </div>
       <ServiceGrid />
+      <div class="industries-head">
+        <p class="label">Industries we serve</p>
+      </div>
+      <Industries />
     </div>
   </section>
+  <style>
+    .industries-head {
+      margin: 56px 0 18px;
+    }
+  </style>
 
   <section class="section band">
     <div class="wrap">
@@ -48,7 +58,7 @@ import Icon from '../components/Icon.astro';
       <div class="section-head split">
         <div>
           <p class="label">Selected projects</p>
-          <h2>Hotels, condos and public buildings</h2>
+          <h2>Hotels, schools and public buildings</h2>
         </div>
         <a class="link-arrow" href="/projects/">All projects <Icon name="arrow" size={16} /></a>
       </div>

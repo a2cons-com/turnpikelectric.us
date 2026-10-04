@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import ZoomPicture from './ZoomPicture.astro';
 import { photo, galleryOrder } from '../data/photos';
 const items = galleryOrder.map(photo);
 ---
@@ -7,7 +7,7 @@ const items = galleryOrder.map(photo);
   {
     items.map((p) => (
       <figure>
-        <Picture src={p.src} alt={p.alt} widths={[400, 700, 1000]} sizes="(max-width: 600px) 100vw, 33vw" formats={['avif', 'webp']} loading="lazy" />
+        <ZoomPicture photo={p} group="gallery" widths={[400, 700, 1000]} sizes="(max-width: 600px) 100vw, 33vw" />
       </figure>
     ))
   }

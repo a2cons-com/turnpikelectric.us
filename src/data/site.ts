@@ -46,9 +46,9 @@ export const nav = [
 
 export const stats = [
   { value: '2010', label: 'In business since' },
-  { value: '500+', label: 'Permitted projects' },
+  { value: '500+', label: 'Projects completed' },
   { value: '5.0★', label: 'Rating on Angi' },
-  { value: 'Statewide', label: 'Certified license' },
+  { value: 'Statewide', label: 'Service area' },
 ];
 
 export type Service = {
@@ -83,6 +83,7 @@ export const services: Service[] = [
     title: 'Light Industrial',
     text: 'Power distribution, equipment feeders and controls for warehouses and shops.',
     items: ['Equipment feeders', 'Motor controls', 'Shop & high-bay lighting'],
+    photo: 'industrial-rail-plant',
   },
   {
     slug: 'residential',
@@ -90,6 +91,7 @@ export const services: Service[] = [
     title: 'Residential',
     text: 'Remodels, additions and whole-house rewiring for homeowners and builders.',
     items: ['Remodels & additions', 'Rewiring', 'Lighting design install'],
+    photo: 'interior-lighting-ladder',
   },
   {
     slug: 'service-upgrades',
@@ -97,6 +99,7 @@ export const services: Service[] = [
     title: 'Service & Panel Upgrades',
     text: 'Meter and service changes, panels, disconnects and underground feeders.',
     items: ['Service upgrades', 'Panel replacements', 'Underground feeders'],
+    photo: 'meter-center-lift',
   },
   {
     slug: 'generators',
@@ -104,13 +107,15 @@ export const services: Service[] = [
     title: 'Generators & UPS',
     text: 'Standby generators, transfer switches and medium to large UPS systems.',
     items: ['Standby generators', 'Transfer switches', 'UPS systems'],
+    photo: 'generators-generac',
   },
   {
     slug: 'fire-alarm-data',
     icon: 'alarm',
-    title: 'Fire Alarm & Data',
-    text: 'Fire alarm systems, structured cabling and low-voltage infrastructure.',
-    items: ['Fire alarm systems', 'Data & voice cabling', 'Low voltage'],
+    title: 'Fire Alarm, Data & Telecom',
+    text: 'Fire alarm systems, structured cabling, low voltage and power for telecom sites and towers.',
+    items: ['Fire alarm systems', 'Data & voice cabling', 'Telecom & tower power'],
+    photo: 'crew-telecom-room',
   },
   {
     slug: 'ev-lighting',
@@ -118,6 +123,7 @@ export const services: Service[] = [
     title: 'EV Charging & Lighting',
     text: 'EV chargers, interior and site lighting, and lightning protection.',
     items: ['EV chargers', 'Site lighting', 'Lightning protection'],
+    photo: 'electrical-room-finished',
   },
 ];
 
@@ -167,14 +173,30 @@ export const reviews = [
   },
 ];
 
-// Named commercial jobs, from public permit records (BuildZoom). Confirm with Sterling before launch.
-export const projects = [
-  { name: 'Monticello Hotel', place: 'Miami Beach', type: 'Hospitality', scope: 'Hotel renovation: 300 fixtures, low voltage and a new fire alarm system' },
+// Named commercial jobs, from public permit records (BuildZoom) and signs in photos Turnpike supplied.
+export type Project = { name: string; place: string; type: string; scope: string; photos?: string[] };
+
+export const projects: Project[] = [
+  { name: 'Monticello Hotel', place: 'Miami Beach', type: 'Hospitality', scope: 'Hotel renovation: 300 fixtures, low voltage and a new fire alarm system', photos: ['monticello-street', 'monticello-oceanside', 'hero-monticello'] },
+  { name: 'Mt. Vernon / Oceanside Hotel', place: 'Miami Beach', type: 'Hospitality', scope: 'Full renovation: 350 fixtures, 690 outlets, data and fire alarm', photos: ['mt-vernon-before-after'] },
   { name: 'Hotel Biba', place: 'West Palm Beach', type: 'Hospitality', scope: 'Boutique hotel alterations, pool electrical, data and voice' },
   { name: "Florida's Turnpike Pompano Service Plaza", place: 'Pompano Beach', type: 'Public', scope: 'Restroom renovation electrical and antenna equipment upgrades' },
-  { name: 'Oceanside Hotel (Mt. Vernon)', place: 'Miami Beach', type: 'Hospitality', scope: 'Renovation: 350 fixtures, 690 outlets, data and fire alarm' },
+  { name: 'The Learning Nest Montessori', place: 'Miami', type: 'Education', scope: 'Electrical for a Montessori preschool', photos: ['learning-nest-preschool'] },
+  { name: "Miami Beach Woman's Club", place: 'Miami Beach', type: 'Public', scope: 'Electrical work for the historic clubhouse', photos: ['miami-beach-womans-club'] },
+  { name: 'Lewis Landing Park', place: 'Broward County', type: 'Public', scope: 'Park and riverwalk electrical and lighting', photos: ['lewis-landing-park'] },
   { name: 'Waterside Hotel', place: 'Miami Beach', type: 'Hospitality', scope: '30-room hotel renovation: lighting, wiring, TV/data and pool' },
   { name: 'Triton Tower', place: 'Miami Beach', type: 'Multifamily', scope: 'New 2,000 A service, meter center and pool deck lighting for a 555-unit condo' },
+];
+
+export const industries = [
+  { icon: 'hotel', label: 'Hospitality' },
+  { icon: 'building', label: 'Multifamily' },
+  { icon: 'building', label: 'Office & retail' },
+  { icon: 'chat', label: 'Restaurants & nightlife' },
+  { icon: 'home', label: 'Education' },
+  { icon: 'pin', label: 'Public & parks' },
+  { icon: 'bolt', label: 'Telecom' },
+  { icon: 'factory', label: 'Industrial' },
 ];
 
 export const coverage = [

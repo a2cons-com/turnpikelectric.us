@@ -1,35 +1,198 @@
 ---
-import { Picture } from 'astro:assets';
+import { Picture, getImage } from 'astro:assets';
 import Icon from './Icon.astro';
 import { projects } from '../data/site';
 import { photo } from '../data/photos';
 
 interface Props {
   limit?: number;
+  filters?: boolean;
 }
-const { limit } = Astro.props;
-const list = limit ? projects.slice(0, limit) : projects;
+const { limit, filters = false } = Astro.props;
+const withPhoto = projects.filter((p) => p.photos?.length);
+const list = limit ? withPhoto.slice(0, limit) : withPhoto;
+const textOnly = limit ? [] : projects.filter((p) => !p.photos?.length);
+const types = [...new Set(projects.map((p) => p.type))];
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+// Large versions for the lightbox, per project.
+const large = Object.fromEntries(
+  await Promise.all(
+    list.map(async (p) => [
+      p.name,
+      await Promise.all(
+        p.photos!.map(async (n) => {
+          const src = photo(n).src;
+          return (await getImage({ src, width: Math.min(1800, src.width), format: 'webp' })).src;
+        }),
+      ),
+    ]),
+  ),
+);
 ---
+{
+  filters && (
+    <div class="filters" role="group" aria-label="Filter projects" data-filters>
+      <button type="button" aria-pressed="true" data-filter="all">All</button>
+      {types.map((t) => (
+        <button type="button" aria-pressed="false" data-filter={t}>{t}</button>
+      ))}
+    </div>
+  )
+}
 <div class="projects">
   {
-    list.map((p) => (
-      <article class:list={['project', { 'has-photo': p.photo }]}>
-        {p.photo && (
-          <Picture src={photo(p.photo).src} alt={photo(p.photo).alt} widths={[500, 800]} sizes="(max-width: 760px) 100vw, 33vw" formats={['avif', 'webp']} loading="lazy" />
-        )}
-        <div class="body">
-          <div class="meta">
-            <span class="tag">{p.type}</span>
-            <span class="place"><Icon name="pin" size={15} /> {p.place}</span>
+    list.map((p) => {
+      const cover = photo(p.photos![0]);
+      const group = `project-${slug(p.name)}`;
+      const caption = `${p.name}, ${p.place}`;
+      const n = p.photos!.length;
+      return (
+        <article class="project" data-type={p.type}>
+          <a class="cover" href={large[p.name][0]} data-lb={group} data-caption={caption} aria-label={`View photos of ${p.name}`}>
+            <Picture src={cover.src} alt={cover.alt} widths={[500, 800]} sizes="(max-width: 760px) 100vw, 33vw" formats={['avif', 'webp']} loading="lazy" />
+            <span class="badge">{n > 1 ? `${n} photos` : 'View photo'}</span>
+          </a>
+          {large[p.name].slice(1).map((src: string) => (
+            <a href={src} data-lb={group} data-caption={caption} hidden-link />
+          ))}
+          <div class="body">
+            <div class="meta">
+              <span class="tag">{p.type}</span>
+              <span class="place"><Icon name="pin" size={15} /> {p.place}</span>
+            </div>
+            <h3>{p.name}</h3>
+            <p>{p.scope}</p>
           </div>
-          <h3>{p.name}</h3>
-          <p>{p.scope}</p>
-        </div>
-      </article>
-    ))
+        </article>
+      );
+    })
   }
 </div>
+{
+  textOnly.length > 0 && (
+    <div data-more>
+      <h3 class="more-title">More projects</h3>
+      <ul class="more">
+        {textOnly.map((p) => (
+          <li data-type={p.type}>
+            <span class="tag">{p.type}</span>
+            <div>
+              <strong>{p.name}</strong> <span class="place-inline">· {p.place}</span>
+              <p>{p.scope}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-filters]').forEach((bar) => {
+    const buttons = [...bar.querySelectorAll<HTMLButtonElement>('button')];
+    const items = [...document.querySelectorAll<HTMLElement>('.project[data-type], .more li[data-type]')];
+    const more = document.querySelector<HTMLElement>('[data-more]');
+    bar.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest('button');
+      if (!b) return;
+      const f = b.dataset.filter;
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      items.forEach((it) => (it.hidden = f !== 'all' && it.dataset.type !== f));
+      if (more) more.hidden = !more.querySelector('li:not([hidden])');
+    });
+  });
+</script>
 <style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .filters button {
+    font: 600 0.92rem/1 var(--font-body);
+    padding: 11px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .filters button:hover {
+    border-color: var(--ink);
+  }
+  .filters button[aria-pressed='true'] {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
+  }
+  [hidden-link] {
+    display: none;
+  }
+  .cover {
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+  .cover :global(img) {
+    transition: transform 0.4s ease;
+  }
+  .project:hover .cover :global(img) {
+    transform: scale(1.04);
+  }
+  .badge {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    font: 500 0.75rem/1 var(--font-mono);
+    color: #fff;
+    background: rgb(10 20 30 / 0.65);
+    padding: 7px 9px;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+  }
+  .project[hidden],
+  .more li[hidden],
+  [data-more][hidden] {
+    display: none;
+  }
+  .more-title {
+    margin: 48px 0 16px;
+  }
+  .more {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 32px;
+  }
+  .more li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+  }
+  .more .tag {
+    flex: none;
+    margin-top: 3px;
+  }
+  .more strong {
+    font-size: 1.05rem;
+  }
+  .place-inline {
+    color: var(--muted);
+  }
+  .more p {
+    margin: 4px 0 0;
+  }
+  @media (max-width: 700px) {
+    .more {
+      grid-template-columns: 1fr;
+    }
+  }
   .projects {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -49,7 +212,7 @@ const list = limit ? projects.slice(0, limit) : projects;
     aspect-ratio: 16 / 10;
     object-fit: cover;
   }
-  .project:not(.has-photo) {
+  .unused-no-photo {
     background:
       linear-gradient(rgb(74 124 68 / 0.07) 1px, transparent 1px) 0 0 / 24px 24px,
       linear-gradient(90deg, rgb(74 124 68 / 0.07) 1px, transparent 1px) 0 0 / 24px 24px,

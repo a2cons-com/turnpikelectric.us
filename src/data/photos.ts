@@ -26,6 +26,36 @@ const alts: Record<string, string> = {
   'hero-hardhats-switchgear': 'Two Turnpike Electric electricians in hard hats at commercial panels',
   'hero-team-yard': 'Turnpike Electric team inspecting a job on site',
   'electrical-room': 'Commercial electrical room with meter centers and switchgear',
+  'generators-generac': 'Row of standby generators and transfer switch cabinets with conduit runs',
+  'pump-station': 'Pump station building with electrical service',
+  'tower-climb': 'Turnpike Electric technician in a safety harness working on a telecom tower',
+  'industrial-rail-plant': 'Crew working on electrical equipment at an industrial rail facility',
+  'warehouse-buildout-crew': 'Crew in hard hats running underground conduit in a warehouse build-out',
+  'ups-install-crew': 'Turnpike Electric electricians installing a large UPS system',
+  'electrical-room-finished': 'Finished electrical room with panels and a bank of conduit risers',
+  'switchboard-crew': 'Turnpike Electric electricians wiring a commercial switchboard',
+  'panel-wall-conduit': 'New panel wall with neatly run EMT conduit',
+  'crew-telecom-room': 'Turnpike Electric crew installing telecom power equipment',
+  'ups-room': 'UPS and switchgear room installed by Turnpike Electric',
+  'fleet-vans': 'Turnpike Electric work van and pickup truck',
+  'learning-nest-preschool': 'The Learning Nest Montessori preschool building in Miami',
+  'arc-flash-safety': 'Electrician in arc-flash protective gear operating switchgear',
+  'lewis-landing-park': 'Lewis Landing Park riverwalk in Broward County',
+  'condo-pool': 'Condominium pool deck with lighting',
+  'condo-night': 'Mid-rise condominium building at night with illuminated facade',
+  'monticello-oceanside': 'Monticello and Oceanside hotel entrance in Miami Beach',
+  'mt-vernon-before-after': 'Mt. Vernon hotel in Miami Beach before and after renovation',
+  'meter-center-lift': 'Crew on a lift installing a large meter center on a commercial building',
+  'miami-beach-womans-club': 'Miami Beach Woman\'s Club building and lawn',
+  'satellite-dish': 'Technician working on a large satellite dish',
+  'monticello-street': 'The Monticello hotel in Miami Beach',
+  'retail-market': 'Retail market interior with refrigerated cases and lighting',
+  'underground-trench-crew': 'Crew laying multiple underground conduits in a trench',
+  'event-hall': 'Event hall with chandeliers and lighting',
+  'restaurant-dining': 'Restaurant dining room with feature lighting',
+  'hero-telecom-crew': 'Turnpike Electric crew installing telecom power equipment in a commercial electrical room',
+  'hero-generators': 'Row of standby generators and transfer switches installed by Turnpike Electric',
+  'hero-monticello': 'The Monticello hotel in Miami Beach',
   'monticello-hotel': 'The Monticello Hotel in Miami Beach, a Turnpike Electric renovation project',
 };
 
@@ -45,16 +75,24 @@ export const photo = (name: string): Photo => {
 };
 
 // Home hero background. Swap for a better (or generated) wide image when available.
-export const heroPhoto = { name: 'hero-crew-meter-center', position: '70% 50%', mobilePosition: '80% 50%' };
+export const heroPhoto = { name: 'hero-telecom-crew', position: '100% 50%', mobilePosition: '76% 50%' };
 
 // Order for the project gallery: strongest first.
 export const galleryOrder = [
-  'hero-crew-meter-center',
-  'hero-hardhats-switchgear',
+  'crew-telecom-room',
+  'switchboard-crew',
+  'meter-center-lift',
+  'ups-install-crew',
+  'generators-generac',
+  'underground-trench-crew',
+  'electrical-room-finished',
+  'tower-climb',
+  'panel-wall-conduit',
+  'ups-room',
+  'warehouse-buildout-crew',
+  'satellite-dish',
+  'arc-flash-safety',
+  'industrial-rail-plant',
   'hero-team-yard',
   'interior-lighting-ladder',
-  'mast-conduit-install',
-  'crew-kitchen-smile',
-  'crew-garden-arch',
-  'hallway-ladder',
 ];

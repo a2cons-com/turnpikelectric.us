@@ -1,0 +1,20 @@
+---
+// A <Picture> wrapped in a link to a large version, opened by the Lightbox.
+import { Picture, getImage } from 'astro:assets';
+import type { Photo } from '../data/photos';
+
+interface Props {
+  photo: Photo;
+  group: string;
+  caption?: string;
+  widths: number[];
+  sizes: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+const { photo, group, caption = photo.alt, widths, sizes, class: className, loading = 'lazy' } = Astro.props;
+const large = await getImage({ src: photo.src, width: Math.min(1800, photo.src.width), format: 'webp' });
+---
+<a href={large.src} data-lb={group} data-caption={caption} class:list={['zoom', className]}>
+  <Picture src={photo.src} alt={photo.alt} widths={widths} sizes={sizes} formats={['avif', 'webp']} loading={loading} />
+</a>

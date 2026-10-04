@@ -27,6 +27,5 @@ Astro generates the resized AVIF/WebP/JPEG versions that are published at build 
 
 ## Before launch
 - [ ] Replace the hero photo with the generated/retouched one
-- [ ] Confirm the project list with Sterling
 - [ ] Set `indexable = true` in `src/data/site.ts`, switch `site` and `CNAME` to the real domain
 - [ ] Revoke the old site's smtpjs token

@@ -1,0 +1,159 @@
+---
+// Site-wide image viewer. Any link with data-lb="<group>" opens its href
+// full-screen; links sharing a group can be stepped through with arrows/swipe.
+// Optional data-caption sets the caption.
+---
+<dialog class="lb" aria-label="Photo viewer" data-lb-dialog>
+  <figure>
+    <img alt="" data-lb-img />
+    <figcaption data-lb-caption></figcaption>
+  </figure>
+  <button class="lb-btn lb-close" type="button" aria-label="Close" data-lb-close>×</button>
+  <button class="lb-btn lb-prev" type="button" aria-label="Previous photo" data-lb-prev>‹</button>
+  <button class="lb-btn lb-next" type="button" aria-label="Next photo" data-lb-next>›</button>
+  <span class="lb-count" data-lb-count></span>
+</dialog>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lb-dialog]')!;
+  const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+  const cap = dlg.querySelector<HTMLElement>('[data-lb-caption]')!;
+  const count = dlg.querySelector<HTMLElement>('[data-lb-count]')!;
+  let items: HTMLAnchorElement[] = [];
+  let i = 0;
+
+  const show = () => {
+    const a = items[i];
+    img.src = a.href;
+    img.alt = a.dataset.caption ?? '';
+    cap.textContent = a.dataset.caption ?? '';
+    count.textContent = items.length > 1 ? `${i + 1} / ${items.length}` : '';
+    dlg.classList.toggle('single', items.length < 2);
+  };
+  const step = (d: number) => {
+    i = (i + d + items.length) % items.length;
+    show();
+  };
+
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-lb]');
+    if (!a || e.metaKey || e.ctrlKey) return;
+    e.preventDefault();
+    const group = a.dataset.lb!;
+    items = [...document.querySelectorAll<HTMLAnchorElement>(`a[data-lb="${group}"]`)].filter(
+      (x) => !x.closest('[hidden]'),
+    );
+    i = Math.max(0, items.indexOf(a));
+    show();
+    dlg.showModal();
+  });
+  dlg.querySelector('[data-lb-close]')!.addEventListener('click', () => dlg.close());
+  dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => step(-1));
+  dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => step(1));
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg) dlg.close();
+  });
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+  let x0 = 0;
+  dlg.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+  dlg.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50 && items.length > 1) step(dx < 0 ? 1 : -1);
+  });
+</script>
+
+<style is:global>
+  a[data-lb] {
+    cursor: zoom-in;
+  }
+  .lb {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(8 14 20 / 0.94);
+    color: #fff;
+  }
+  .lb::backdrop {
+    background: transparent;
+  }
+  .lb[open] {
+    display: grid;
+    place-items: center;
+  }
+  .lb figure {
+    margin: 0;
+    max-width: 92vw;
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+  }
+  .lb img {
+    max-width: 92vw;
+    max-height: 80dvh;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+  }
+  .lb figcaption {
+    font-size: 0.95rem;
+    color: rgb(255 255 255 / 0.85);
+    text-align: center;
+    max-width: 60ch;
+  }
+  .lb-btn {
+    position: fixed;
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lb-btn:hover {
+    background: rgb(255 255 255 / 0.24);
+  }
+  .lb-close {
+    top: 16px;
+    right: 16px;
+  }
+  .lb-prev,
+  .lb-next {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb-prev {
+    left: 16px;
+  }
+  .lb-next {
+    right: 16px;
+  }
+  .lb.single .lb-prev,
+  .lb.single .lb-next {
+    display: none;
+  }
+  .lb-count {
+    position: fixed;
+    top: 28px;
+    left: 24px;
+    font: 500 0.85rem/1 var(--font-mono);
+    color: rgb(255 255 255 / 0.7);
+  }
+  @media (max-width: 600px) {
+    .lb-prev,
+    .lb-next {
+      top: auto;
+      bottom: 20px;
+      transform: none;
+    }
+  }
+</style>

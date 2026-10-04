@@ -1,5 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
+import ZoomPicture from '../components/ZoomPicture.astro';
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Reviews from '../components/Reviews.astro';
@@ -7,7 +8,9 @@ import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 import { company, coverage } from '../data/site';
 import { photo } from '../data/photos';
-const team = photo('interior-lighting-ladder');
+const team = photo('switchboard-crew');
+const fleet = photo('fleet-vans');
+const safety = photo('arc-flash-safety');
 ---
 <Base title="About" description="Turnpike Electric was founded in 2010 in Miami with one premise: quality over anything and everything. Florida certified electrical contractor EC13004836.">
   <PageHeader label="About us · Since 2010" image="hero-team-yard" position="70% 40%" title="Quality over anything and everything." narrow />
@@ -20,7 +23,7 @@ const team = photo('interior-lighting-ladder');
         <p>Our crews are bilingual. Se habla español.</p>
         <ul class="facts">
           <li><Icon name="badge" /><div><strong>{company.license}</strong><span>{company.licenseLabel}</span></div></li>
-          <li><Icon name="building" /><div><strong>500+</strong><span>Permitted projects since {company.founded}</span></div></li>
+          <li><Icon name="building" /><div><strong>500+</strong><span>Projects since {company.founded}</span></div></li>
           <li><Icon name="pin" /><div><strong>Statewide</strong><span>{company.tagline}</span></div></li>
         </ul>
       </div>
@@ -29,6 +32,19 @@ const team = photo('interior-lighting-ladder');
   </section>
 
   <section class="section band">
+    <div class="wrap duo">
+      <figure>
+        <ZoomPicture photo={safety} group="about" widths={[500, 800]} sizes="(max-width: 860px) 100vw, 50vw" />
+        <figcaption><strong>Safety first.</strong> Arc-flash PPE, lockout/tagout and trained crews on every energized job.</figcaption>
+      </figure>
+      <figure>
+        <ZoomPicture photo={fleet} group="about" widths={[500, 800]} sizes="(max-width: 860px) 100vw, 50vw" />
+        <figcaption><strong>Our own fleet.</strong> Stocked trucks and vans, so crews arrive ready to work.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="wrap">
       <div class="section-head">
         <p class="label">Service area</p>
@@ -39,7 +55,7 @@ const team = photo('interior-lighting-ladder');
     </div>
   </section>
 
-  <section class="section">
+  <section class="section band">
     <div class="wrap">
       <div class="section-head">
         <p class="label">Reviews</p>
@@ -98,6 +114,39 @@ const team = photo('interior-lighting-ladder');
   .facts span {
     color: var(--muted);
     font-size: 0.92rem;
+  }
+  .duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .duo figure {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .duo :global(.zoom) {
+    display: block;
+  }
+  .duo :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .duo figcaption {
+    padding: 20px 24px;
+    color: var(--muted);
+  }
+  .duo strong {
+    color: var(--ink);
+  }
+  @media (max-width: 760px) {
+    .duo {
+      grid-template-columns: 1fr;
+    }
   }
   .chips {
     list-style: none;
