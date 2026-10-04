@@ -1,22 +1,45 @@
 ---
-// Home hero: one full-bleed background photo with the headline on top.
+// Home hero: full-bleed background photos that slowly crossfade behind a
+// fixed headline. Only the first photo is part of the initial page load.
 import { getImage } from 'astro:assets';
 import Icon from './Icon.astro';
 import { company, intro, stats } from '../data/site';
-import { photo, heroPhoto } from '../data/photos';
+import { photo, heroPhotos } from '../data/photos';
 
-const img = photo(heroPhoto.name);
-const widths = [768, 1280, 1920, 2560].filter((w) => w <= img.src.width).concat(img.src.width < 2560 ? [img.src.width] : []);
-const avif = await getImage({ src: img.src, widths, format: 'avif' });
-const webp = await getImage({ src: img.src, widths, format: 'webp' });
-const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
+const slides = await Promise.all(
+  heroPhotos.map(async (h) => {
+    const src = photo(h.name).src;
+    const widths = [768, 1280, 1920, 2560].filter((w) => w <= src.width).concat(src.width < 2560 ? [src.width] : []);
+    const [avif, webp, jpg] = await Promise.all(
+      (['avif', 'webp', 'jpeg'] as const).map((format) => getImage({ src, widths, format })),
+    );
+    return { ...h, avif: avif.srcSet.attribute, webp: webp.srcSet.attribute, jpg: jpg.srcSet.attribute, fallback: jpg.src };
+  }),
+);
 ---
-<section class="hero">
-  <picture class="bg">
-    <source type="image/avif" srcset={avif.srcSet.attribute} sizes="100vw" />
-    <source type="image/webp" srcset={webp.srcSet.attribute} sizes="100vw" />
-    <img src={jpg.src} srcset={jpg.srcSet.attribute} sizes="100vw" alt="" fetchpriority="high" style={`--pos:${heroPhoto.position};--pos-m:${heroPhoto.mobilePosition}`} />
-  </picture>
+<section class="hero static">
+  {
+    slides.map((s, i) =>
+      i === 0 ? (
+        <picture class="bg active">
+          <source type="image/avif" srcset={s.avif} sizes="100vw" />
+          <source type="image/webp" srcset={s.webp} sizes="100vw" />
+          <img src={s.fallback} srcset={s.jpg} sizes="100vw" alt="" fetchpriority="high" style={`--pos:${s.position};--pos-m:${s.mobilePosition}`} />
+        </picture>
+      ) : (
+        <picture class="bg" data-slide>
+          <source type="image/avif" data-srcset={s.avif} sizes="100vw" />
+          <source type="image/webp" data-srcset={s.webp} sizes="100vw" />
+          <img data-src={s.fallback} data-srcset={s.jpg} sizes="100vw" alt="" decoding="async" style={`--pos:${s.position};--pos-m:${s.mobilePosition}`} />
+        </picture>
+      ),
+    )
+  }
+  <div class="slide-nav" aria-label="Background photos" data-slide-nav hidden>
+    <button type="button" class="nav-btn" aria-label="Previous photo" data-prev>‹</button>
+    {slides.map((_, i) => <button type="button" class="sdot" aria-label={`Photo ${i + 1}`} aria-pressed={i === 0 ? 'true' : 'false'} data-dot={i} />)}
+    <button type="button" class="nav-btn" aria-label="Next photo" data-next>›</button>
+  </div>
   <div class="wrap">
     <div class="copy">
       <p class="kicker"><span class="dot"></span>{company.licenseLabel} · {company.license}</p>
@@ -42,6 +65,81 @@ const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
   </dl>
 </div>
 
+<script>
+  // After the page has fully loaded, fetch the other hero photos and crossfade
+  // every 8 s. Arrow keys, the ‹ › buttons and dots switch by hand (and restart
+  // the timer). Reduced motion: no auto-advance. Pauses while the tab is hidden.
+  const hero = document.querySelector<HTMLElement>('.hero');
+  if (hero) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const slides = [...hero.querySelectorAll<HTMLElement>('.bg')];
+    const dots = [...hero.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const nav = hero.querySelector<HTMLElement>('[data-slide-nav]')!;
+    let i = 0;
+    let timer = 0;
+
+    const ready = (n: number) => {
+      const img = slides[n].querySelector('img')!;
+      return img.complete && img.naturalWidth > 0;
+    };
+    const show = (n: number) => {
+      n = (n + slides.length) % slides.length;
+      if (n === i) return;
+      const img = slides[n].querySelector('img')!;
+      if (!ready(n)) {
+        img.addEventListener('load', () => show(n), { once: true });
+        return;
+      }
+      // New photo fades in on top; the old one stays opaque underneath until
+      // the fade is done, so the page background never shows through.
+      hero.classList.remove('static');
+      slides.forEach((s) => s.classList.remove('prev'));
+      slides[i].classList.replace('active', 'prev');
+      slides[n].classList.add('active');
+      const old = slides[i];
+      const incoming = slides[n];
+      const done = () => {
+        if (incoming.classList.contains('active')) old.classList.remove('prev');
+      };
+      incoming.addEventListener('animationend', done, { once: true });
+      setTimeout(done, 2600); // backup if animationend doesn't fire
+      dots.forEach((d, k) => d.setAttribute('aria-pressed', String(k === n)));
+      i = n;
+    };
+    const restart = () => {
+      clearInterval(timer);
+      if (!reduced)
+        timer = window.setInterval(() => {
+          if (!document.hidden) show(i + 1);
+        }, 8000);
+    };
+    const start = () => {
+      hero.querySelectorAll<HTMLElement>('[data-slide]').forEach((pic) => {
+        pic.querySelectorAll<HTMLElement>('[data-srcset]').forEach((el) => el.setAttribute('srcset', el.dataset.srcset!));
+        const img = pic.querySelector<HTMLImageElement>('img')!;
+        img.src = img.dataset.src!;
+      });
+      nav.hidden = false;
+      restart();
+    };
+    const go = (n: number) => {
+      show(n);
+      restart();
+    };
+    hero.querySelector('[data-prev]')!.addEventListener('click', () => go(i - 1));
+    hero.querySelector('[data-next]')!.addEventListener('click', () => go(i + 1));
+    dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+    addEventListener('keydown', (e) => {
+      const t = e.target as HTMLElement;
+      if (nav.hidden || t.closest('input, textarea, select, [contenteditable], dialog[open]')) return;
+      if (e.key === 'ArrowRight') go(i + 1);
+      if (e.key === 'ArrowLeft') go(i - 1);
+    });
+    if (document.readyState === 'complete') start();
+    else addEventListener('load', start, { once: true });
+  }
+</script>
+
 <style>
   .hero {
     position: relative;
@@ -52,6 +150,7 @@ const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
     padding: calc(var(--header-h) + 48px) 0 140px;
     color: #fff;
     overflow: hidden;
+    background: var(--navy);
   }
   .bg,
   .bg img {
@@ -64,6 +163,94 @@ const jpg = await getImage({ src: img.src, widths, format: 'jpeg' });
   .bg img {
     object-fit: cover;
     object-position: var(--pos);
+  }
+  .bg {
+    opacity: 0;
+    z-index: -4;
+  }
+  .bg.prev {
+    opacity: 1;
+    z-index: -3;
+  }
+  .bg.active {
+    opacity: 1;
+    z-index: -2;
+  }
+  .bg.active:not(:only-child) {
+    animation: hero-fade 2s ease both;
+  }
+  .hero.static .bg.active {
+    animation: none;
+  }
+  @keyframes hero-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Same rule for .prev, so the outgoing photo keeps zooming (no snap
+       back to 100%) while the next one fades in over it. */
+    .bg.active img,
+    .bg.prev img {
+      animation: hero-zoom 10s linear both;
+    }
+  }
+  .slide-nav {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 96px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.55;
+    transition: opacity 0.2s;
+  }
+  .slide-nav:hover,
+  .slide-nav:focus-within {
+    opacity: 1;
+  }
+  .slide-nav[hidden] {
+    display: none;
+  }
+  .nav-btn {
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .sdot {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.4);
+    cursor: pointer;
+  }
+  .sdot[aria-pressed='true'] {
+    background: rgb(255 255 255 / 0.95);
+  }
+  @media (max-width: 760px) {
+    .slide-nav {
+      bottom: 84px;
+    }
+  }
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.1);
+    }
   }
   @media (max-width: 760px) {
     .bg img {

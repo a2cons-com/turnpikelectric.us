@@ -74,8 +74,14 @@ export const photo = (name: string): Photo => {
   return p;
 };
 
-// Home hero background. Swap for a better (or generated) wide image when available.
-export const heroPhoto = { name: 'hero-telecom-crew', position: '100% 50%', mobilePosition: '76% 50%' };
+// Home hero backgrounds, crossfading in this order. The first one loads with
+// the page; the rest load after the page has finished loading.
+export const heroPhotos = [
+  { name: 'hero-telecom-crew', position: '100% 50%', mobilePosition: '76% 50%' },
+  { name: 'hero-team-yard', position: '100% 35%', mobilePosition: '78% 40%' },
+  { name: 'hero-hardhats-switchgear', position: '80% 40%', mobilePosition: '72% 50%' },
+  { name: 'hero-generators', position: '85% 50%', mobilePosition: '70% 50%' },
+];
 
 // Order for the project gallery: strongest first.
 export const galleryOrder = [
